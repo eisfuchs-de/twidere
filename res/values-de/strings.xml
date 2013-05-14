@@ -418,4 +418,6 @@
   <string name="mention_user">Erwähnung <xliff:g id="user">%s</xliff:g></string>
   <string name="theme_color">Theme Farbe</string>
   <string name="link_underline_only">Nur Links unterstreichen</string>
+  <string name="use_holo_theme">Benutze das Holo-Thema</string>
+  <string name="use_holo_theme_summary">Benutze das &quot;Holo&quot;-System-Thema</string>
 </resources>

@@ -46,7 +46,7 @@ class BaseDialogActivity extends FragmentActivity implements Constants, IThemedA
 		return (TwidereApplication) getApplication();
 	}
 
-	@Override
+	// @Override // Eisfuchs: commented out - seems like an error
 	public boolean isThemeChanged() {
 		final SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		final boolean is_dark_theme = preferences.getBoolean(PREFERENCE_KEY_DARK_THEME, false);
@@ -86,6 +86,7 @@ class BaseDialogActivity extends FragmentActivity implements Constants, IThemedA
 		}
 	}
 
+	// @Override // Eisfuchs: commented out - seems like an error
 	private void setTheme() {
 		final SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		final boolean is_dark_theme = preferences.getBoolean(PREFERENCE_KEY_DARK_THEME, false);

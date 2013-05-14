@@ -42,4 +42,10 @@ public class ThemeColorPreference extends ColorPickerPreference implements Const
 		final String key = dark_theme ? PREFERENCE_KEY_DARK_THEME_COLOR : PREFERENCE_KEY_LIGHT_THEME_COLOR;
 		return prefs.getInt(key, def);
 	}
+
+	public static boolean getUseHoloTheme(final Context context) {
+		final SharedPreferences prefs = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
+		final boolean use_holo_theme = prefs.getBoolean(PREFERENCE_KEY_USE_HOLO_THEME, true);
+		return use_holo_theme;
+	}
 }

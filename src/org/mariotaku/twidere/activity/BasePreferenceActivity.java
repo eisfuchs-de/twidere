@@ -41,7 +41,7 @@ import org.mariotaku.twidere.app.TwidereApplication;
 
 class BasePreferenceActivity extends ActionBarPreferenceActivity implements Constants, IThemedActivity {
 
-	private boolean mIsDarkTheme, mIsSolidColorBackground, mHardwareAccelerated;
+	private boolean mIsDarkTheme, mIsSolidColorBackground, mUseHoloTheme, mHardwareAccelerated;
 
 	public TwidereApplication getTwidereApplication() {
 		return (TwidereApplication) getApplication();
@@ -62,12 +62,13 @@ class BasePreferenceActivity extends ActionBarPreferenceActivity implements Cons
 		return mIsSolidColorBackground;
 	}
 
-	@Override
+	// @Override // Eisfuchs: commented out - seems like an error
 	public boolean isThemeChanged() {
 		final SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		final boolean is_dark_theme = preferences.getBoolean(PREFERENCE_KEY_DARK_THEME, false);
 		final boolean solid_color_background = preferences.getBoolean(PREFERENCE_KEY_SOLID_COLOR_BACKGROUND, false);
-		return is_dark_theme != mIsDarkTheme || solid_color_background != mIsSolidColorBackground;
+		final boolean use_holo_theme = preferences.getBoolean(PREFERENCE_KEY_USE_HOLO_THEME, true);
+		return is_dark_theme != mIsDarkTheme || solid_color_background != mIsSolidColorBackground || use_holo_theme != mUseHoloTheme;
 	}
 
 	@Override
@@ -96,7 +97,11 @@ class BasePreferenceActivity extends ActionBarPreferenceActivity implements Cons
 		final int color = getThemeColor(this);
 		final Drawable d = a.getDrawable(0);
 		if (d == null) return;
-		if (mIsDarkTheme) {
+		if(!mUseHoloTheme) {
+			int background_resource=R.drawable.status_list_item_bg_slate;
+			Drawable background = getResources().getDrawable(background_resource);
+			ab.setBackgroundDrawable(background);
+		} else if (mIsDarkTheme) {
 			final Drawable mutated = d.mutate();
 			mutated.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
 			ab.setBackgroundDrawable(mutated);
@@ -120,15 +125,15 @@ class BasePreferenceActivity extends ActionBarPreferenceActivity implements Cons
 		}
 	}
 
-	@Override
 	public void setTheme() {
 		final SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		final boolean is_dark_theme = preferences.getBoolean(PREFERENCE_KEY_DARK_THEME, false);
 		mIsDarkTheme = preferences.getBoolean(PREFERENCE_KEY_DARK_THEME, false);
+		mUseHoloTheme = preferences.getBoolean(PREFERENCE_KEY_USE_HOLO_THEME, true);
 		mIsSolidColorBackground = preferences.getBoolean(PREFERENCE_KEY_SOLID_COLOR_BACKGROUND, false);
-		setTheme(is_dark_theme ? getDarkThemeRes() : getLightThemeRes());
-		if (mIsSolidColorBackground && shouldSetBackground()) {
-			getWindow().setBackgroundDrawableResource(is_dark_theme ? android.R.color.black : android.R.color.white);
+		setTheme((is_dark_theme || !mUseHoloTheme) ? getDarkThemeRes() : getLightThemeRes());
+		if ((mIsSolidColorBackground || !mUseHoloTheme) && shouldSetBackground()) {
+			getWindow().setBackgroundDrawableResource((is_dark_theme || !mUseHoloTheme) ? android.R.color.black : android.R.color.white);
 		}
 	}
 

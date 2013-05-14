@@ -3,16 +3,16 @@
 	android:key="settings"
 	android:title="@string/settings">
 
-	<CheckBoxPreference
+	<CheckBoxPreference android:key="use_holo_theme" android:title="@string/use_holo_theme" android:summary="@string/use_holo_theme_summary" android:defaultValue="true" /><CheckBoxPreference
 		android:defaultValue="false"
 		android:key="dark_theme"
 		android:summary="@string/dark_theme_summary"
-		android:title="@string/dark_theme"/>
+		android:title="@string/dark_theme" android:dependency="use_holo_theme"/>
 	<CheckBoxPreference
 		android:defaultValue="false"
 		android:key="solid_color_background"
 		android:summary="@string/solid_color_background_summary"
-		android:title="@string/solid_color_background"/>
+		android:title="@string/solid_color_background" android:dependency="use_holo_theme"/>
 	
 	<!--
 	<org.mariotaku.twidere.preference.ThemeColorPreference

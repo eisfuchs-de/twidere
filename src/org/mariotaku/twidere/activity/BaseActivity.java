@@ -47,7 +47,7 @@ import android.util.Log;
 @SuppressLint("Registered")
 public class BaseActivity extends ActionBarFragmentActivity implements Constants, IThemedActivity {
 
-	private boolean mIsDarkTheme, mIsSolidColorBackground, mHardwareAccelerated;
+	private boolean mIsDarkTheme, mIsSolidColorBackground, mUseHoloTheme, mHardwareAccelerated;
 
 	private boolean mInstanceStateSaved, mIsVisible, mIsOnTop;
 
@@ -67,7 +67,8 @@ public class BaseActivity extends ActionBarFragmentActivity implements Constants
 		final SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		final boolean is_dark_theme = preferences.getBoolean(PREFERENCE_KEY_DARK_THEME, false);
 		final boolean solid_color_background = preferences.getBoolean(PREFERENCE_KEY_SOLID_COLOR_BACKGROUND, false);
-		return is_dark_theme != mIsDarkTheme || solid_color_background != mIsSolidColorBackground;
+		final boolean use_holo_theme = preferences.getBoolean(PREFERENCE_KEY_USE_HOLO_THEME, true);
+		return is_dark_theme != mIsDarkTheme || solid_color_background != mIsSolidColorBackground || use_holo_theme!=mUseHoloTheme;
 	}
 	
 	public boolean isVisible() {
@@ -132,7 +133,11 @@ public class BaseActivity extends ActionBarFragmentActivity implements Constants
 		final int color = getThemeColor(this);
 		final Drawable d = a.getDrawable(0);
 		if (d == null) return;
-		if (mIsDarkTheme) {
+		if(!mUseHoloTheme) {
+			int background_resource=R.drawable.status_list_item_bg_slate;
+			Drawable background = getResources().getDrawable(background_resource);
+			ab.setBackgroundDrawable(background);
+		} else if (mIsDarkTheme) {
 			final Drawable mutated = d.mutate();
 			mutated.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
 			ab.setBackgroundDrawable(mutated);
@@ -161,9 +166,10 @@ public class BaseActivity extends ActionBarFragmentActivity implements Constants
 		final boolean is_dark_theme = preferences.getBoolean(PREFERENCE_KEY_DARK_THEME, false);
 		mIsDarkTheme = preferences.getBoolean(PREFERENCE_KEY_DARK_THEME, false);
 		mIsSolidColorBackground = preferences.getBoolean(PREFERENCE_KEY_SOLID_COLOR_BACKGROUND, false);
-		setTheme(is_dark_theme ? getDarkThemeRes() : getLightThemeRes());
-		if (mIsSolidColorBackground && shouldSetBackground()) {
-			getWindow().setBackgroundDrawableResource(is_dark_theme ? android.R.color.black : android.R.color.white);
+		mUseHoloTheme = preferences.getBoolean(PREFERENCE_KEY_USE_HOLO_THEME, true);
+		setTheme((is_dark_theme || !mUseHoloTheme) ? getDarkThemeRes() : getLightThemeRes());
+		if ((mIsSolidColorBackground || !mUseHoloTheme) && shouldSetBackground()) {
+			getWindow().setBackgroundDrawableResource((is_dark_theme || !mUseHoloTheme) ? android.R.color.black : android.R.color.white);
 		}
 	}
 

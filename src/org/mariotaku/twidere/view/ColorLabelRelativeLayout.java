@@ -20,8 +20,10 @@
 package org.mariotaku.twidere.view;
 
 import static org.mariotaku.twidere.util.Utils.isRTL;
+import static org.mariotaku.twidere.preference.ThemeColorPreference.getUseHoloTheme;
 
 import org.mariotaku.twidere.view.iface.IColorLabelView;
+import org.mariotaku.twidere.R;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -29,6 +31,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
@@ -38,6 +41,8 @@ public class ColorLabelRelativeLayout extends RelativeLayout implements IColorLa
 	private final Rect mRectLeft = new Rect(), mRectRight = new Rect(), mRectBackground = new Rect();
 	private final float mDensity;
 	private final boolean mIsRTL;
+
+	private boolean mUseHoloTheme = true;
 
 	public ColorLabelRelativeLayout(final Context context) {
 		this(context, null);
@@ -56,6 +61,8 @@ public class ColorLabelRelativeLayout extends RelativeLayout implements IColorLa
 		mPaintRight.setColor(Color.TRANSPARENT);
 		mPaintBackground.setColor(Color.TRANSPARENT);
 		mIsRTL = isRTL(context);
+		mUseHoloTheme = getUseHoloTheme(context);
+		setBackgroundColor(Color.TRANSPARENT);
 	}
 
 	@Override
@@ -100,5 +107,16 @@ public class ColorLabelRelativeLayout extends RelativeLayout implements IColorLa
 			mRectRight.set(w - (int) (LABEL_WIDTH * mDensity), 0, w, h);
 		}
 		super.onSizeChanged(w, h, oldw, oldh);
+	}
+
+	@Override
+	public void setBackgroundColor(int color) {
+		if (mUseHoloTheme) {
+			super.setBackgroundColor(color);
+		} else {
+			int background_resource = R.drawable.status_list_item_bg_slate;
+			Drawable background = getResources().getDrawable(background_resource);
+			super.setBackgroundDrawable(background);
+		}
 	}
 }

@@ -29,6 +29,7 @@ import org.mariotaku.twidere.fragment.FiltersListFragment;
 import org.mariotaku.twidere.fragment.InternalSettingsFragment;
 import org.mariotaku.twidere.fragment.SettingsDetailsFragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -70,6 +71,7 @@ public class SettingsActivity extends DualPaneActivity implements OnSharedPrefer
 
 	}
 
+	@SuppressLint("NewApi")
 	@Override
 	public boolean onOptionsItemSelected(final MenuItem item) {
 		switch (item.getItemId()) {
@@ -162,7 +164,10 @@ public class SettingsActivity extends DualPaneActivity implements OnSharedPrefer
 
 	@Override
 	public void onSharedPreferenceChanged(final SharedPreferences preferences, final String key) {
-		if (PREFERENCE_KEY_DARK_THEME.equals(key) || PREFERENCE_KEY_SOLID_COLOR_BACKGROUND.equals(key)) {
+		if (
+			PREFERENCE_KEY_DARK_THEME.equals(key) ||
+			PREFERENCE_KEY_SOLID_COLOR_BACKGROUND.equals(key) ||
+			PREFERENCE_KEY_USE_HOLO_THEME.equals(key)) {
 			restartActivity(this);
 		}
 	}

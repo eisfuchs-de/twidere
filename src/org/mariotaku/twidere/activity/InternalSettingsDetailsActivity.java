@@ -117,9 +117,10 @@ public class InternalSettingsDetailsActivity extends PreferenceActivity implemen
 		final SharedPreferences preferences = getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
 		final boolean is_dark_theme = preferences.getBoolean(PREFERENCE_KEY_DARK_THEME, false);
 		final boolean solid_color_background = preferences.getBoolean(PREFERENCE_KEY_SOLID_COLOR_BACKGROUND, false);
-		setTheme(is_dark_theme ? R.style.Theme_Twidere : R.style.Theme_Twidere_Light);
-		if (solid_color_background) {
-			getWindow().setBackgroundDrawableResource(is_dark_theme ? android.R.color.black : android.R.color.white);
+		final boolean use_holo_theme = preferences.getBoolean(PREFERENCE_KEY_USE_HOLO_THEME, true);
+		setTheme((is_dark_theme || !use_holo_theme) ? R.style.Theme_Twidere : R.style.Theme_Twidere_Light);
+		if (solid_color_background || !use_holo_theme) {
+			getWindow().setBackgroundDrawableResource((is_dark_theme || !use_holo_theme) ? android.R.color.black : android.R.color.white);
 		}
 	}
 }
