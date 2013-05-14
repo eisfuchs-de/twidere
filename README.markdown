@@ -1,5 +1,7 @@
 ##Twidere - Twitter client, ∞##
 
+NOTE: This is not the original Twidere client! This is an adaptation by Dario Abatianni <eisfuchs@tigress.com> to include an alternative timeline design. You can find the original Twidere client at GitHub (source code): https://github.com/mariotaku/twidere
+
 Twidere is a powerful twitter client for Android 1.6+, which gives you a full Holo theme and much more.
 
 ---
